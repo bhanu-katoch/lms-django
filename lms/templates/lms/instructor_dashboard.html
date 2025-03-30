@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome, {{ user.username }} (Instructor)</h2>
+    <p>Manage your courses here:</p>
+    <a href="{% url 'add_course' %}" class="btn btn-primary">Add New Course</a>
+    <a href="{% url 'view_courses' %}" class="btn btn-success">View Your Courses</a>
+</div>
+{% endblock %}

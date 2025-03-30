@@ -14,7 +14,7 @@ def user_login(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Logged in successfully!")
-            return redirect("home")  # Change to your home page
+            return redirect("dashboard")  # Change to your home page
         else:
             messages.error(request, "Invalid username or password!")
 
@@ -36,5 +36,5 @@ def register(request):
         form = RegistrationForm()
 
     return render(request, "auth/register.html", {"form": form})
-def home(request):
-    return render(request,'home.html')
+def home_user(request):
+    return render(request,'home_user.html')
