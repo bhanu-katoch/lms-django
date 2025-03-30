@@ -4,6 +4,17 @@
     <h2>Welcome, {{ user.username }} (Instructor)</h2>
     <p>Manage your courses here:</p>
     <a href="{% url 'add_course' %}" class="btn btn-primary">Add New Course</a>
-    <a href="{% url 'view_courses' %}" class="btn btn-success">View Your Courses</a>
+    <a href="{% url 'course_list' %}" class="btn btn-success">View Your Courses</a>
+    <!-- All Courses Section -->
+    <h3>All Available Courses</h3>
+    {% if all_courses %}
+        <ul>
+            {% for course in all_courses %}
+                <li>{{ course.title }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No courses available.</p>
+    {% endif %}
 </div>
 {% endblock %}

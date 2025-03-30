@@ -5,5 +5,17 @@
     <p>Explore courses and start learning today.</p>
     <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
     <a href="{% url 'dashboard' %}" class="btn btn-success">Go to Dashboard</a>
+    
+    <!-- All Courses Section -->
+    <h3>All Available Courses</h3>
+    {% if all_courses %}
+        <ul>
+            {% for course in all_courses %}
+                <li>{{ course.title }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No courses available.</p>
+    {% endif %}
 </div>
 {% endblock %}

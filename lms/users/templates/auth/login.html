@@ -6,6 +6,16 @@
 <div class="row justify-content-center">
     <div class="col-md-4">
         <h2 class="text-center text-primary mb-4">Login</h2>
+
+        <!-- Display Error Messages Above the Login Button -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center fade-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
         <form method="post">
             {% csrf_token %}
             <div class="mb-3">
@@ -16,11 +26,34 @@
                 <label>Password:</label>
                 <input type="password" name="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-success w-100"">Login</button>
+            <button type="submit" class="btn btn-success w-100">Login</button>
         </form>
+
         <p class="text-center mt-3">
             Don't have an account? <a href="{% url 'register' %}">Register</a>
         </p>
     </div>
 </div>
+
+<style>
+    .fade-message {
+        transition: opacity 1s ease-out; /* Smooth fade-out effect */
+    }
+</style>
+
+<!-- JavaScript to Remove Message After 3 Seconds -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let messages = document.querySelectorAll('.fade-message');
+        if (messages.length > 0) {
+            setTimeout(function () {
+                messages.forEach(function (msg) {
+                    msg.style.opacity = "0";  // Start fading
+                    setTimeout(() => msg.remove(), 1000); // Remove after fade-out
+                });
+            }, 1000); // Wait 3 seconds before fading
+        }
+    });
+</script>
+
 {% endblock %}

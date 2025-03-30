@@ -25,7 +25,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', views.home, name='home'),  # Default public homepage
     path('dashboard/', views.dashboard, name='dashboard'),  # Requires login
-    path('users/',include('users.urls')),
-
-
+    path('users/',include('users.urls')),    
+    path('courses/', include('courses.urls')),
+    
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
