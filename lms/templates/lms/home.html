@@ -1,21 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-4 text-center">
-    <h1>Welcome to Our LMS</h1>
-    <p>Explore courses and start learning today.</p>
-    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-    <a href="{% url 'dashboard' %}" class="btn btn-success">Go to Dashboard</a>
+<div class="container mt-5 text-center">
+    <h1 class="mb-4">Welcome to Our LMS</h1>
+    <p class="lead">Explore courses and start learning today.</p>
     
+
     <!-- All Courses Section -->
-    <h3>All Available Courses</h3>
+    <h3 class="mt-5 mb-4 fw-bold text-center">All Available Courses</h3>
+
+
     {% if all_courses %}
-        <ul>
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             {% for course in all_courses %}
-                <li>{{ course.title }}</li>
+            <div class="col d-flex justify-content-center">
+                <a href="#" class="card-link" style="text-decoration: none; color: inherit;">
+                    <div class="card shadow-sm rounded course-card text-center" style="width: 100%; max-width: 18rem; min-height: 24rem;">
+                        <img src="{{ course.course_pic.url }}" class="card-img-top" alt="Course Image" 
+                             style="height: 180px; object-fit: cover;"> 
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title fw-bold">{{ course.title }}</h5>
+                            <p class="card-text text-muted">{{ course.description|truncatewords:15 }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p class="text-muted">No courses available.</p>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No courses available.</p>
+        </div>
+    </div>
+    
     {% endif %}
 </div>
-{% endblock %}
+
+{% endblock %} 

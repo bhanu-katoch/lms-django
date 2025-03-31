@@ -1,34 +1,91 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>All Courses</h2>
-<ul>
-  {% for course in all_courses %}
-  <li>{{ course.title }}</li>
-  {% empty %}
-  <p>No courses available.</p>
-  {% endfor %}
-</ul>
 
+<!-- Conditional Sections Based on User Role -->
 {% if user.is_authenticated %}
-{% if user.role == 'student' %}
-<h2>Your Enrolled Courses</h2>
-<ul>
-  {% for course in enrolled_courses %}
-  <li>{{ course.title }}</li>
-  {% empty %}
-  <p>You are not enrolled in any courses.</p>
-  {% endfor %}
-</ul>
-{% elif user.role == 'instructor' %}
-<h2>Your Taught Courses</h2>
-<ul>
-  {% for course in taught_courses %}
-  <li>{{ course.title }}</li>
-  {% empty %}
-  <p>You are not teaching any courses.</p>
-  {% endfor %}
-</ul>
+
+    {% if user.role == 'student' %}
+    <h3 class="mt-5 mb-4 fw-bold text-center">Your Enrolled Courses</h3>
+
+        {% if enrolled_courses %}
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for course in enrolled_courses %}
+                <div class="col d-flex justify-content-center">
+                    <a href="#" class="card-link text-decoration-none text-dark">
+                        <div class="card shadow-sm rounded enrolled-course-card text-center" style="width: 100%; max-width: 18rem; min-height: 24rem; border-left: 4px solid #007bff;">
+                            <img src="{{ course.course_pic.url }}" class="card-img-top rounded-top" alt="Course Image" 
+                                 style="height: 180px; object-fit: cover;"> 
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title fw-bold">{{ course.title }}</h5>
+                                <p class="card-text text-muted">{{ course.description|truncatewords:15 }}</p>
+                                <a href="#" class="btn btn-outline-primary mt-2">Continue Learning</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">You are not enrolled in any courses.</p>
+        {% endif %}
+
+    {% elif user.role == 'instructor' %}
+    <h3 class="mt-5 mb-4 fw-bold text-center">Your Taught Courses</h3>
+
+        {% if taught_courses %}
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for course in taught_courses %}
+                <div class="col d-flex justify-content-center">
+                    <a href="#" class="card-link text-decoration-none text-dark">
+                        <div class="card shadow-sm rounded taught-course-card text-center" style="width: 100%; max-width: 18rem; min-height: 24rem; border-left: 4px solid #28a745;">
+                            <img src="{{ course.course_pic.url }}" class="card-img-top rounded-top" alt="Course Image">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <h5 class="card-title fw-bold">{{ course.title }}</h5>
+                                <p class="card-text text-muted">{{ course.description|truncatewords:15 }}</p>
+                                <a href="#" class="btn btn-outline-success mt-2">Manage Course</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">You haven't created any courses yet.</p>
+        {% endif %}
+    {% endif %}
+
 {% endif %}
-{% endif %}
+
+<!-- Styles -->
+<style>
+    /* General Course Card Styling */
+    .enrolled-course-card, .taught-course-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    /* Hover Effects */
+    .enrolled-course-card:hover, .taught-course-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 12px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Unique Styling for Enrolled Courses */
+    .enrolled-course-card {
+        border-left: 4px solid #007bff;
+        box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+    }
+
+    /* Unique Styling for Taught Courses */
+    .taught-course-card {
+        border-left: 4px solid #28a745;
+        box-shadow: 0 0 12px rgba(40, 167, 69, 0.3);
+    }
+</style>
+
 {% endblock %}

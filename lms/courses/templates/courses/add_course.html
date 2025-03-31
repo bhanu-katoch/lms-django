@@ -1,10 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Add a New Course</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Add Course</button>
-</form>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center fw-bold text-primary mb-3">Add a New Course</h2>
+        <p class="text-center text-muted">Fill in the details to create a new course.</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <div class="form-text text-muted">{{ field.help_text }}</div>
+                {% endif %}
+                {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success fw-bold py-2">Add Course</button>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container mt-4">
-    <h2>Welcome, {{ user.username }} (Admin)</h2>
-    <p>Manage users and courses:</p>
-    <a href="/admin" class="btn btn-danger">Go to Admin Panel</a>
-    <!-- All Courses Section -->
-    <h3>All Available Courses</h3>
-    {% if all_courses %}
-        <ul>
-            {% for course in all_courses %}
-                <li>{{ course.title }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No courses available.</p>
-    {% endif %}
+
+<div class="container d-flex flex-column justify-content-center align-items-center vh-100">
+    <div class="text-center">
+        <h1 class="fw-bold">Welcome, <span class="text-primary">{{ user.username }}</span></h1>
+        <h4 class="text-muted">Admin Dashboard</h4>
+        <p class="text-muted">Manage users, courses, and content efficiently.</p>
+
+        <!-- Admin Panel Button -->
+        <div class="mt-4">
+            <a href="{% url 'admin:index' %}" class="btn btn-danger px-5 py-3 fw-bold shadow-lg">
+                Go to Admin Panel
+            </a>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
