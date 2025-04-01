@@ -7,6 +7,24 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <button id="pay-btn" class="btn btn-primary">Pay Now</button>
 
+    <!-- Bootstrap Modal for Custom Alert -->
+    <div class="modal fade" id="customAlertModal" tabindex="-1" aria-labelledby="customAlertLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="customAlertLabel">💳 Payment Successful</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Your payment was successful! Redirecting...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="redirect()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function getCSRFToken() {
             let cookieValue = null;
@@ -25,18 +43,17 @@
 
         var options = {
             "key": "{{ key_id }}",
-            "amount": Math.round(Number("{{ amount }}") * 100),  // Convert rupees to paise correctly
+            "amount": Math.round(Number("{{ amount }}") * 100),
             "currency": "INR",
             "name": "LMS Payment",
             "description": "Enroll in {{ course.title }}",
             "order_id": "{{ order_id }}",
             "handler": function (response) {
-                // Sending data via POST request to Django server
                 fetch("{% url 'payment_success' %}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRFToken": getCSRFToken()  // Include CSRF token
+                        "X-CSRFToken": getCSRFToken()
                     },
                     body: JSON.stringify({
                         razorpay_order_id: response.razorpay_order_id,
@@ -47,8 +64,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert("Payment successful! Redirecting...");
-                        window.location.href = "{% url 'course_detail' course.id %}";  // Redirect to course page
+                        showCustomAlert();
                     } else {
                         alert("Payment verification failed: " + data.error);
                     }
@@ -64,6 +80,15 @@
             var rzp1 = new Razorpay(options);
             rzp1.open();
         };
+
+        function showCustomAlert() {
+            var modal = new bootstrap.Modal(document.getElementById('customAlertModal'));
+            modal.show();
+        }
+
+        function redirect() {
+            window.location.href = "{% url 'course_detail' course.id %}";
+        }
     </script>
 </div>
 {% endblock %}
