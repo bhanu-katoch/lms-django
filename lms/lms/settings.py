@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
 
@@ -137,6 +137,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
+
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_SECRET')
+RAZORPAY_CURRENCY = "INR"
+RAZORPAY_SUCCESS_URL = "/payments/success/"
+RAZORPAY_FAILURE_URL = "/payments/failure/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

@@ -64,3 +64,5 @@ def dashboard(request):
         })
 
     return render(request, 'lms/home.html', {'all_courses': all_courses, 'query': query})  # Default case
+
+
