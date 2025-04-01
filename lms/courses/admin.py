@@ -8,6 +8,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ('title', 'instructor')  # Display title and instructor
     search_fields = ('title', 'instructor__username')  # Add search functionality
     list_filter = ('instructor',)  # Filter by instructor
+    filter_horizontal = ('students',)
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
