@@ -56,6 +56,36 @@ def add_course(request):
     return render(request, 'courses/add_course.html', {'form': form})
 
 @login_required
+def edit_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+
+    # Only the instructor should edit
+    if request.user.role != "instructor":
+        return redirect('course_list', course_id=course.id)
+
+    if request.method == "POST":
+        form = CourseForm(request.POST, request.FILES, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_course', course_id=course.id)
+    else:
+        form = CourseForm(instance=course)
+
+    return render(request, "courses/edit_course.html", {"form": form, "course": course})
+
+def manage_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    # quizzes = Quiz.objects.filter(course=course)
+    # assignments = Assignment.objects.filter(course=course)
+    
+    context = {
+        'course': course,
+        # 'quizzes': quizzes,
+        # 'assignments': assignments
+    }
+    return render(request, 'courses/manage_course.html', context)
+
+@login_required
 def course_detail(request, course_id):
     """View to display course details and handle enrollment actions."""
     course = get_object_or_404(Course, id=course_id)

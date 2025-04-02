@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-primary fw-bold">{{course.title}} Dashboard</h2>
+    <p class="text-muted">Manage quizzes, assignments, and settings related to course of {{course.title}}.</p>
+
+    <div class="card shadow-lg p-4 mt-4 custom-card">
+        <h3 class="fw-bold text-secondary">{{ course.title }}</h3>
+        <p class="text-muted">{{ course.description }}</p>
+    
+        <a href="{% url 'edit_course' course.id %}" class="btn custom-btn">Edit Course</a>
+    </div>
+    
+    <style>
+    /* Card hover effect */
+    .custom-card {
+        border: 2px solid transparent;
+        transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+    
+    .custom-card:hover {
+        border-color: rgba(0, 123, 255, 0.7); /* Blue border */
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); /* Blue glow effect */
+        transform: scale(1.02); /* Slight pop-up effect */
+    }
+    
+    /* Empty button by default */
+    .custom-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid rgb(70, 104, 154); /* Blue outline */
+        border-radius: 8px;
+        color: rgba(0, 123, 255, 0.7);
+        background-color: transparent;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+    
+    /* Button fills with blue light color on hover */
+    .custom-btn:hover {
+        background-color: #0056b3; /* Light blue background */
+        color: #fff; /* White text */
+    }
+    </style>
+    
+    
+    {% comment %} <div class="mt-4">
+        <h4 class="fw-bold">Quizzes</h4>
+        <ul class="list-group">
+            {% for quiz in quizzes %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ quiz.title }}
+                    <span class="badge bg-info">{{ quiz.total_questions }} Questions</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No quizzes available.</li>
+            {% endfor %}
+        </ul>
+    </div> {% endcomment %}
+    
+    {% comment %} <div class="mt-4">
+        <h4 class="fw-bold">Assignments</h4>
+        <ul class="list-group">
+            {% for assignment in assignments %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ assignment.title }}
+                    <span class="badge bg-success">Due: {{ assignment.due_date }}</span>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted">No assignments available.</li>
+            {% endfor %}
+        </ul>
+    </div> {% endcomment %}
+</div>
+
+{% endblock %}
