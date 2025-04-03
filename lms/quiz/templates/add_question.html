@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Add Question to "{{ quiz.title }}" of {{quiz.course.title}} course</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Question Form -->
+        <div class="mb-3">
+            <label for="id_text" class="form-label">Question:</label>
+            {{ question_form.text }}
+        </div>
+
+        <h4>Options</h4>
+
+        <div id="option-formset">
+            {{ option_formset.management_form }}
+            {% for form in option_formset %}
+                <div class="option-item">
+                    {{ form.as_p }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Add More Options Button (JS will handle this) -->
+
+        <br><br>
+
+        <button type="submit" class="btn btn-success">✅ Save Question</button>
+        <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-secondary">⬅ Back to Quiz</a>
+    </form>
+
+
+{% endblock %}

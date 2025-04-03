@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Quiz Result: {{ quiz.title }}</h2>
+    <p><strong>Score:</strong> {{ score }} / {{ quiz.questions.count }}</p>
+    <p><strong>Percentage:</strong> {{ percentage|floatformat:2 }}%</p>
+
+    <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-warning">Restart Quiz</a>
+{% endblock %}

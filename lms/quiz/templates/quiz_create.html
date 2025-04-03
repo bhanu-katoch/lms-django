@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="fw-bold">Create a New Quiz for <span style="color:rgba(0, 123, 255, 0.7);">{{course.title}} Course</span></h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Create Quiz</button>
+        <a href="{% url 'manage_course' course.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

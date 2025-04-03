@@ -10,11 +10,11 @@
             <p class="text-muted">{{ course.description }}</p>
             
             {% if user.is_superuser %}
-                <a href="#" class="btn btn-success">View Course</a>
+                <a href="{% url "course_content" course.id %}" class="btn btn-success">View Course</a>
             {% elif user.role == 'instructor' %}
                 <p class="text-danger">Instructors cannot enroll in courses.</p>
             {% elif is_enrolled %}
-                <a href="#" class="btn btn-success">View Course</a>
+                <a href="{% url "course_content" course.id %}" class="btn btn-success">View Course</a>
             {% else %}
                 {% if course.is_free %}
                     <a href="{% url 'enroll' course.id %}" class="btn btn-primary">Enroll for Free</a>

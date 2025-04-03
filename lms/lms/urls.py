@@ -27,6 +27,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),  # Requires login
     path('users/',include('users.urls')),    
     path('courses/', include('courses.urls')),
+    path('quiz/', include('quiz.urls')),
 
     path("__reload__/", include("django_browser_reload.urls")),    
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

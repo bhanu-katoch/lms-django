@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Edit Option</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}
+
+## quiz_progress.html
+{% extends "base.html" %}
+{% block content %}
+<h2>Quiz Progress</h2>
+<ul>
+    {% for progress in user_progress %}
+    <li>
+        {{ progress.quiz.title }} - {{ progress.score }}/100 - {% if progress.completed %}✅ Completed{% else %}⏳ In Progress{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

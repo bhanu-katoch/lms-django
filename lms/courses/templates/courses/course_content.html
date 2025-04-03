@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>{{ course.title }}</h2>
+    <p>{{ course.description }}</p>
+
+    <h4>Quizzes</h4>
+    <ul class="list-group">
+        {% for quiz in quizzes %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ quiz.title }}</span>
+                <div>
+                    {% for attempt_quiz_id, attempt in quiz_attempts.items %}
+                        {% if attempt_quiz_id == quiz.id and attempt.completed %}
+                            <a href="{% url 'quiz_result' quiz.id %}" class="btn btn-info">View Result</a>
+                            <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-warning">Restart Quiz</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if quiz.id not in quiz_attempts %}
+                        <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-success">Start Quiz</a>
+                    {% endif %}
+                </div>
+            </li>
+        {% empty %}
+             <li class="list-group-item text-muted">No quizzes available.</li>
+        {% endfor %}
+
+    </ul>
+
+    {% comment %} <h4 class="mt-4">Assignments</h4>
+    <ul class="list-group">
+        {% for assignment in course.assignments.all %}
+            <li class="list-group-item">
+                {{ assignment.title }} - <a href="{{ assignment.file.url }}" class="btn btn-primary btn-sm">Download</a>
+            </li>
+        {% empty %}
+            <li class="list-group-item text-muted">No assignments available.</li>
+        {% endfor %}
+    </ul> {% endcomment %}
+{% endblock %}

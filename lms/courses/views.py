@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 import razorpay 
 from django.conf import settings
+from quiz.models import Quiz,QuizAttempt
+from quiz.views import quiz_create,quiz_detail,quiz_edit,quiz_delete
 
 def course_list(request):
     """Show courses based on user role, with improved search functionality"""
@@ -73,14 +75,26 @@ def edit_course(request, course_id):
 
     return render(request, "courses/edit_course.html", {"form": form, "course": course})
 
+@login_required
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    
+    if request.method == "POST":
+        course.delete()
+        messages.success(request, "Course deleted successfully!")
+        return redirect("course_list")  # Redirect to the instructor's dashboard
+    
+    return render(request, "courses/course_delete.html", {"course": course})
+
+@login_required
 def manage_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    # quizzes = Quiz.objects.filter(course=course)
+    quizzes = Quiz.objects.filter(course=course)
     # assignments = Assignment.objects.filter(course=course)
     
     context = {
         'course': course,
-        # 'quizzes': quizzes,
+        'quizzes': quizzes,
         # 'assignments': assignments
     }
     return render(request, 'courses/manage_course.html', context)
@@ -96,7 +110,19 @@ def course_detail(request, course_id):
         'is_enrolled': is_enrolled
     })
 
+@login_required
+def course_content(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    quizzes = Quiz.objects.filter(course=course)
+    
+    # Get quiz attempts for the logged-in user
+    quiz_attempts = {attempt.quiz.id: attempt for attempt in QuizAttempt.objects.filter(student=request.user)}
 
+    return render(request, "courses/course_content.html", {
+        "course": course,
+        "quizzes": quizzes,
+        "quiz_attempts": quiz_attempts
+    })
 @login_required
 def enroll_course(request, course_id):
     """View to enroll a user in a course, with admin auto-enrolled and instructors restricted."""

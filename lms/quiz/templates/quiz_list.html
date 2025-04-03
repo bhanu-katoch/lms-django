@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Quizzes</h2>
+<ul>
+    {% for quiz in quizzes %}
+    <li>
+        <a href="{% url 'quiz_detail' quiz.id %}">{{ quiz.title }}</a>
+        <a href="{% url 'quiz_edit' quiz.id %}">✏️</a>
+        <form action="{% url 'quiz_delete' quiz.id %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">🗑️</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'quiz_create' course.id %}">➕ Add Quiz</a>
+{% endblock %}

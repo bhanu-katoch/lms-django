@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-5 text-center custom-card">
+        <h2 class="text-danger fw-bold">Delete Course</h2>
+        <p class="text-muted">Are you sure you want to delete the course <strong>"{{ course.title }}"</strong>?</p>
+        <p class="text-muted">This action cannot be undone.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-center gap-4">
+                <button type="submit" class="btn btn-danger fw-bold px-4 py-2">Delete</button>
+                <a href="{% url 'manage_course' course.id %}" class="btn btn-secondary fw-bold px-4 py-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+/* Custom card styling */
+.custom-card {
+    max-width: 600px; /* Increase width */
+    width: 100%;
+    padding: 40px;
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+}
+
+/* Button adjustments */
+button, .btn {
+    font-size: 1.1rem; /* Bigger text */
+}
+</style>
+
+{% endblock %}

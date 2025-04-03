@@ -22,11 +22,40 @@
             </div>
             {% endfor %}
 
-            <div class="d-grid gap-2">
+            <div class="d-flex justify-content-center gap-3">
                 <button type="submit" class="btn btn-success fw-bold py-2">Edit Course</button>
-                <a href="{% url 'manage_course' course.id %}" class="btn btn-danger btn-secondary fw-bold py-2">Cancel</a>
+                
+                <a href="{% url 'manage_course' course.id %}" class="btn btn-secondary fw-bold py-2 no-warning">Cancel</a>
+            
+                <a href="{% url 'delete_course' course.id %}" class="btn btn-danger fw-bold py-2 no-warning">Delete</a>
             </div>
+            
         </form>
     </div>
 </div>
+<script>
+    let formModified = false;
+
+    // Detect changes in input, textarea, or select fields
+    document.querySelectorAll("input, textarea, select").forEach((element) => {
+        element.addEventListener("input", () => {
+            formModified = true;
+        });
+    });
+
+    // Prevent warning when clicking "Cancel" or "Delete"
+    document.querySelectorAll(".no-warning").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            formModified = false;
+        });
+    });
+
+    // Show warning only if form is modified
+    window.onbeforeunload = function (event) {
+        if (formModified) {
+            return "Are you sure you want to leave? Any unsaved changes will be lost.";
+        }
+    };
+</script>
+
 {% endblock %}
