@@ -5,4 +5,8 @@
     <p><strong>Percentage:</strong> {{ percentage|floatformat:2 }}%</p>
 
     <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-warning">Restart Quiz</a>
+    <a href="{% url 'course_content' quiz.course.id %}" class="btn btn-danger">End Quiz</a>
+    
+
+
 {% endblock %}
