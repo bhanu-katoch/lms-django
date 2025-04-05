@@ -3,62 +3,87 @@
 {% block content %}
 <div class="container my-5">
 
-    <div class="card shadow-sm p-4">
-        <h2 class="text-center mb-3">{{ quiz.title }}</h2>
-        <p class="text-center text-muted">{{ quiz.description }}</p>
+    <div class="card shadow-lg p-5 rounded-4">
 
-        <hr>
+        <!-- Page Title -->
+        <h1 class="text-center mb-4 fw-bold">
+            📝 Quiz Editor
+        </h1>
+        <p class="text-center text-muted mb-5">
+            Manage and edit your quiz, add or remove questions easily.
+        </p>
 
-        <div class="d-flex justify-content-center gap-3 mb-4">
-            <a href="{% url 'quiz_edit' quiz.id %}" class="btn btn-outline-primary">
-                ✏️ Edit Quiz
+        <!-- Back to Course Button -->
+        <div class="text-center mb-5">
+            <a href="{% url 'manage_course' quiz.course.id %}" 
+               class="btn btn-lg btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm">
+                <i class="bi bi-arrow-left-circle"></i>
+                Back to {{ quiz.course.title }}
             </a>
-            <a href="{% url 'add_question' quiz.id %}" class="btn btn-success">
-                ➕ Add Question
+        </div>
+
+        <!-- Quiz Overview -->
+        <div class="text-center mb-4">
+            <h2 class="mb-2">{{ quiz.title }}</h2>
+            <span class="badge bg-primary mb-2">{{ quiz.total_questions }} Questions</span>
+            <p class="text-muted">{{ quiz.description }}</p>
+        </div>
+
+        <hr class="my-4">
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center flex-wrap gap-3 mb-5">
+            <a href="{% url 'quiz_edit' quiz.id %}" class="btn btn-outline-primary btn-lg rounded-3 px-4">
+                ✏️ Edit Quiz Info
             </a>
-            <a href="{% url 'quiz_delete' quiz.id %}" class="btn btn-outline-danger">
+            <a href="{% url 'add_question' quiz.id %}" class="btn btn-success btn-lg rounded-3 px-4">
+                ➕ Add New Question
+            </a>
+            <a href="{% url 'quiz_delete' quiz.id %}" class="btn btn-outline-danger btn-lg rounded-3 px-4">
                 🗑️ Delete Quiz
             </a>
         </div>
 
-        <h4 class="mb-3">Questions</h4>
+        <!-- Questions List Heading -->
+        <h3 class="text-center mb-4 fw-semibold">
+            📋 Questions in this Quiz
+        </h3>
 
         {% if quiz.questions.all %}
-        <ul class="list-group">
-            {% for question in quiz.questions.all %}
-                <li class="list-group-item mb-4 shadow-sm rounded p-3">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <strong>{{ forloop.counter }}. {{ question.text }}</strong> <!-- 👈 Question number -->
-                            <ul class="mt-2">
-                                {% for option in question.options.all %}
-                                    <li>{{ option.text }}</li>
-                                {% endfor %}
-                            </ul>
+            <ul class="list-group list-group-flush">
+                {% for question in quiz.questions.all %}
+                    <li class="list-group-item shadow-sm mb-4 rounded-3 p-4">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div class="flex-grow-1 pe-3">
+                                <strong>{{ forloop.counter }}. {{ question.text }}</strong>
+                                <ul class="mt-2 ps-3">
+                                    {% for option in question.options.all %}
+                                        <li>{{ option.text }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="d-flex flex-column gap-2 align-items-end">
+                                <a href="{% url 'edit_question' question.id %}" 
+                                   class="btn btn-outline-warning btn-sm rounded-pill">
+                                    ✏️ Edit
+                                </a>
+                                <form action="{% url 'delete_question' question.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                            class="btn btn-outline-danger btn-sm rounded-pill">
+                                        🗑️ Delete
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-        
-                        <div class="d-flex flex-column gap-2">
-                            <a href="{% url 'edit_question' question.id %}" 
-                               class="btn btn-sm btn-outline-warning rounded-pill w-100 text-center">
-                                ✏️ Edit
-                            </a>
-                            <form action="{% url 'delete_question' question.id %}" method="POST" class="w-100">
-                                {% csrf_token %}
-                                <button type="submit" 
-                                        class="btn btn-sm btn-outline-danger rounded-pill w-100 text-center">
-                                    🗑️ Delete
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-                <br>
-            {% endfor %}
-        </ul>
-        
+                    </li>
+                {% endfor %}
+            </ul>
         {% else %}
-            <p class="text-muted text-center">No questions added yet.</p>
+            <p class="text-muted text-center">No questions added yet. Start by adding a question above!</p>
         {% endif %}
+
     </div>
 
 </div>
