@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 <div class="container mt-5">
     <div class="card shadow p-4 rounded">
@@ -7,32 +8,101 @@
         <!-- Score Summary -->
         <div class="mb-4">
             <h4 class="fw-semibold">Your Score</h4>
-            <p class="fs-5 mb-1"><strong>{{ score }}</strong> out of <strong>{{ quiz.questions.count }}</strong></p>
+            <p class="fs-5 mb-1">
+                <strong>{{ score }}</strong> out of <strong>{{ quiz.questions.count }}</strong>
+            </p>
             <div class="progress" style="height: 25px;">
-                <div class="progress-bar 
+                <div class="progress-bar
                             {% if percentage >= 75 %}bg-success
                             {% elif percentage >= 50 %}bg-info
                             {% elif percentage >= 35 %}bg-warning
                             {% else %}bg-danger{% endif %}"
-                     role="progressbar"
-                     style="width: {{ percentage }}%;"
-                     aria-valuenow="{{ percentage }}"
-                     aria-valuemin="0"
-                     aria-valuemax="100">
+                    role="progressbar"
+                    style="width: {{ percentage }}%;"
+                    aria-valuenow="{{ percentage }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
                     {{ percentage|floatformat:2 }}%
                 </div>
             </div>
         </div>
 
+        <!-- Show Answers Button -->
+        <div class="text-center mt-4">
+            <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#answersCard" aria-expanded="false" aria-controls="answersCard">
+                Show Your Answers
+            </button>
+        </div>
+
+        <!-- Answers Review in Separate Card -->
+        <div class="collapse mt-4" id="answersCard">
+            <div class="card card-body shadow-sm p-4">
+                <h4 class="fw-semibold mb-3 text-center text-success">Your Answers</h4>
+                <ul class="list-group list-group-flush">
+                    {% for question in questions %}
+                        <li class="list-group-item py-4">
+                            <h5 class="mb-3">{{ forloop.counter }}. {{ question.text }}</h5>
+
+                            {% for option in question.options.all %}
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" 
+                                           type="radio" 
+                                           disabled
+                                           {% if option == question.selected_option %} checked {% endif %}
+                                    >
+                                    <label class="form-check-label 
+                                        {% if option.is_correct %}
+                                            text-success
+                                        {% elif option == question.selected_option %}
+                                            text-danger
+                                        {% endif %}
+                                    ">
+                                        {{ option.text }}
+                                        {% if option.is_correct %}
+                                            <i class="bi bi-check-circle-fill"></i>
+                                        {% elif option == question.selected_option %}
+                                            <i class="bi bi-x-circle-fill"></i>
+                                        {% endif %}
+                                    </label>
+                                </div>
+                            {% endfor %}
+
+                            <div class="mt-2">
+                                <span class="fw-bold text-primary">🧑‍🎓 You Selected: </span>
+                                {% if question.selected_option %}
+                                    {{ question.selected_option.text }}
+                                {% else %}
+                                    <span class="text-muted">No Answer Selected</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-2">
+                                <span class="fw-bold text-success">✅ Correct Answer: 
+                                    {% for option in question.options.all %}
+                                        {% if option.is_correct %}
+                                            {{ option.text }}{% if not forloop.last %}, {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </span>
+                            </div>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">No questions found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
         <!-- Action Buttons -->
-        <div class="d-flex justify-content-center gap-3 mt-4">
-            <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-outline-warning btn-lg">
+        <div class="d-flex justify-content-center gap-4 mt-5 flex-wrap">
+            <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-outline-warning btn-lg d-flex align-items-center gap-2">
                 <i class="bi bi-arrow-clockwise"></i> Restart Quiz
             </a>
-            <a href="{% url 'course_content' quiz.course.id %}" class="btn btn-outline-danger btn-lg">
+            <a href="{% url 'course_content' quiz.course.id %}" class="btn btn-outline-danger btn-lg d-flex align-items-center gap-2">
                 <i class="bi bi-box-arrow-right"></i> End Quiz
             </a>
         </div>
     </div>
 </div>
+
 {% endblock %}

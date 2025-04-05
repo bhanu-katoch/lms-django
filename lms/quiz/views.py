@@ -151,7 +151,22 @@ def quiz_result(request, quiz_id):
     score = attempt.score
     percentage = (score / total_questions) * 100 if total_questions else 0
 
-    return render(request, "quiz_result.html", {"quiz": quiz, "score": score, "percentage": percentage})
+    # Instead of a dictionary, let's attach selected options directly
+    responses = QuizResponse.objects.filter(attempt=attempt)
+    selected_options = {response.question.id: response.selected_option for response in responses}
+
+    # Attach selected option to each question
+    questions = quiz.questions.all()
+    for question in questions:
+        question.selected_option = selected_options.get(question.id)
+
+    return render(request, "quiz_result.html", {
+        "quiz": quiz,
+        "score": score,
+        "percentage": percentage,
+        "questions": questions,   # <-- pass questions separately
+    })
+
 
 @login_required
 def restart_quiz(request, quiz_id):
