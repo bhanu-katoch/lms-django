@@ -195,7 +195,7 @@ def create_payment(request, course_id):
     )
 
     return render(request, "courses/payment_page.html", {
-        "razorpay_key": settings.RAZORPAY_KEY_ID,
+        "key_id": settings.RAZORPAY_KEY_ID,
         "order_id": order["id"],
         "amount": int(course.price),
         "currency": settings.RAZORPAY_CURRENCY,
@@ -241,7 +241,9 @@ def payment_success(request):
                 'razorpay_signature': signature
             }
 
+            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
             client.utility.verify_payment_signature(params_dict)
+
 
             # Update payment record
             payment.payment_id = payment_id
