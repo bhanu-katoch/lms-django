@@ -18,27 +18,36 @@
     <div class="mt-4">
         <h4 class="fw-bold">Quizzes</h4>
         <a href="{% url 'quiz_create' course.id %}" class="btn btn-success mb-2">➕ Create Quiz</a>
+        <style>
+            .quiz-button {
+                transition: all 0.3s ease;
+                color: rgba(0, 123, 255, 0.7);
+
+            }
+            .quiz-button:hover {
+                transform: translateY(-5px); /* Move up on hover */
+                background-color: #0056b3; /* Light blue background */
+                color: white; /* Text color turns white */
+                box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); /* Blue glow effect */
+
+            }
+        </style>
+        
         <ul class="list-group">
             {% for quiz in quizzes %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <a href="{% url 'quiz_detail' quiz.id %}" class="fw-bold">{{ quiz.title }}</a>
-                        <span class="badge bg-info">{{ quiz.total_questions }} Questions</span>
-                    </div>
-                    <div>
-                        <a href="{% url 'quiz_edit' quiz.id %}" class="btn btn-primary btn-sm">✏️ Edit</a>
-                        {% comment %} <form action="{% url 'quiz_delete' quiz.id %}" method="POST" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm">🗑️ Delete</button>
-                        </form> {% endcomment %}
-                        <a href="{% url 'quiz_delete' quiz.id %}" class="btn btn-danger">🗑️ Delete Quiz</a>
-
-                    </div>
-                </li>
+                <a href="{% url 'quiz_detail' quiz.id %}" class="text-decoration-none">
+                    <li class="list-group-item d-flex justify-content-between align-items-center text-center rounded-pill mb-2 shadow-sm quiz-button">
+                        <div class="w-100">
+                            <div class="fw-bold">{{ quiz.title }}</div>
+                        </div>
+                        <span class="badge bg-info ms-2">{{ quiz.total_questions }} Questions</span>
+                    </li>
+                </a>
             {% empty %}
-                <li class="list-group-item text-muted">No quizzes available.</li>
+                <li class="list-group-item text-muted text-center">No quizzes available.</li>
             {% endfor %}
         </ul>
+        
     </div>
     
     

@@ -1,12 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>Quiz Result: {{ quiz.title }}</h2>
-    <p><strong>Score:</strong> {{ score }} / {{ quiz.questions.count }}</p>
-    <p><strong>Percentage:</strong> {{ percentage|floatformat:2 }}%</p>
+<div class="container mt-5">
+    <div class="card shadow p-4 rounded">
+        <h2 class="text-center fw-bold mb-4 text-primary">Quiz Result: {{ quiz.title }}</h2>
 
-    <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-warning">Restart Quiz</a>
-    <a href="{% url 'course_content' quiz.course.id %}" class="btn btn-danger">End Quiz</a>
-    
+        <!-- Score Summary -->
+        <div class="mb-4">
+            <h4 class="fw-semibold">Your Score</h4>
+            <p class="fs-5 mb-1"><strong>{{ score }}</strong> out of <strong>{{ quiz.questions.count }}</strong></p>
+            <div class="progress" style="height: 25px;">
+                <div class="progress-bar 
+                            {% if percentage >= 75 %}bg-success
+                            {% elif percentage >= 50 %}bg-info
+                            {% elif percentage >= 35 %}bg-warning
+                            {% else %}bg-danger{% endif %}"
+                     role="progressbar"
+                     style="width: {{ percentage }}%;"
+                     aria-valuenow="{{ percentage }}"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    {{ percentage|floatformat:2 }}%
+                </div>
+            </div>
+        </div>
 
-
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-outline-warning btn-lg">
+                <i class="bi bi-arrow-clockwise"></i> Restart Quiz
+            </a>
+            <a href="{% url 'course_content' quiz.course.id %}" class="btn btn-outline-danger btn-lg">
+                <i class="bi bi-box-arrow-right"></i> End Quiz
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -37,21 +37,32 @@
 
 <style>
     .fade-message {
-        transition: opacity 1s ease-out; /* Smooth fade-out effect */
+        opacity: 1;
+        max-height: 200px;
+        overflow: hidden;
+        transform: translateY(0);
+        transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1); /* Smoother timing */
     }
-</style>
-
-<!-- JavaScript to Remove Message After 3 Seconds -->
+    
+    .fade-message.fade-out {
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+        padding: 0;
+        transform: translateY(-10px); /* slight slide up */
+    }
+    </style>
+    
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         let messages = document.querySelectorAll('.fade-message');
         if (messages.length > 0) {
             setTimeout(function () {
                 messages.forEach(function (msg) {
-                    msg.style.opacity = "0";  // Start fading
-                    setTimeout(() => msg.remove(), 1000); // Remove after fade-out
+                    msg.classList.add('fade-out'); // Smoothly fade and collapse
+                    setTimeout(() => msg.remove(), 800); // Remove after animation
                 });
-            }, 1000); // Wait 3 seconds before fading
+            }, 1000); // Wait 3s before disappearing
         }
     });
 </script>

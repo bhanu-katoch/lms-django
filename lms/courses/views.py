@@ -8,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 import razorpay 
 from django.conf import settings
 from quiz.models import Quiz,QuizAttempt
-from quiz.views import quiz_create,quiz_detail,quiz_edit,quiz_delete
 
 def course_list(request):
     """Show courses based on user role, with improved search functionality"""
@@ -173,9 +172,9 @@ def enroll_course(request, course_id):
 
 # Initialize Razorpay Client
 from django.http import JsonResponse
-client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 def create_payment(request, course_id):
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
     course = Course.objects.get(id=course_id)
 
     # Create order in Razorpay

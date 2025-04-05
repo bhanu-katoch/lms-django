@@ -36,7 +36,7 @@ def quiz_edit(request, quiz_id):
         form = QuizForm(request.POST, instance=quiz)
         if form.is_valid():
             form.save()
-            return redirect('manage_course',quiz.course.id)
+            return redirect('quiz_detail',quiz.id)
     else:
         form = QuizForm(instance=quiz)
     return render(request, 'quiz_edit.html', {'form': form})

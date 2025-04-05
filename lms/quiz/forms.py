@@ -25,11 +25,27 @@ class QuestionForm(forms.ModelForm):
         model = Question
         fields = ['text']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter your question here'
+        })
+
 class OptionForm(forms.ModelForm):
     class Meta:
         model = Option
         fields = ['text', 'is_correct']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['text'].widget.attrs.update({
+            'class': 'form-control',
+            'placeholder': 'Enter option text'
+        })
+        self.fields['is_correct'].widget.attrs.update({
+            'class': 'form-check-input'
+        })
 OptionFormSet = inlineformset_factory(
     Question, 
     Option, 

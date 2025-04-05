@@ -1,19 +1,88 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-    <h2>{{ quiz.title }}</h2>
-    <p>{{ quiz.description }}</p>
+<div class="container my-5">
 
-    <form method="POST">
-        {% csrf_token %}
-        {% for question in quiz.questions.all %}
-            <h4>{{ question.text }}</h4>
+  <h2 class="text-center mb-4">{{ quiz.title }}</h2>
+
+  <!-- Progress Bar -->
+  <div class="progress mb-4" style="height: 25px;">
+    <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%;">
+      0%
+    </div>
+  </div>
+  
+
+  <form method="POST" id="quiz-form" class="card shadow p-4">
+    {% csrf_token %}
+    
+    <div id="question-container">
+      {% for question in quiz.questions.all %}
+        <div class="question-box" style="display: none;">
+          <h5 class="mb-3">{{ forloop.counter }}. {{ question.text }}</h5>
+          <div class="list-group">
             {% for option in question.options.all %}
-                <label>
-                    <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}"> {{ option.text }}
-                </label><br>
+              <label class="list-group-item">
+                <input class="form-check-input me-1" type="radio" name="question_{{ question.id }}" value="{{ option.id }}">
+                {{ option.text }}
+              </label>
             {% endfor %}
-        {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 
-        <button type="submit" class="btn btn-success">Submit Quiz</button>
-    </form>
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-between mt-4">
+      <button type="button" class="btn btn-secondary" id="prev-btn" onclick="prevQuestion()">Previous</button>
+      <button type="button" class="btn btn-primary" id="next-btn" onclick="nextQuestion()">Next</button>
+      <button type="submit" class="btn btn-success" id="submit-btn" style="display: none;">Submit Quiz</button>
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+  let currentQuestion = 0;
+  const questions = document.querySelectorAll('.question-box');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  const submitBtn = document.getElementById('submit-btn');
+  const progressBar = document.getElementById('progress-bar');
+
+  function showQuestion(index) {
+    questions.forEach((q, idx) => {
+      q.style.display = idx === index ? 'block' : 'none';
+    });
+
+    // Update progress bar
+    const progress = Math.round(((index) / questions.length) * 100);
+    progressBar.style.width = progress + '%';
+    progressBar.innerText = progress + '%';
+
+    // Button visibility
+    prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+    nextBtn.style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+    submitBtn.style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+  }
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      showQuestion(currentQuestion);
+    }
+  }
+
+  function prevQuestion() {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      showQuestion(currentQuestion);
+    }
+  }
+
+  // Initialize
+  showQuestion(currentQuestion);
+</script>
+
 {% endblock %}

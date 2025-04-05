@@ -17,10 +17,29 @@
         <div id="option-formset">
             {{ option_formset.management_form }}
             {% for form in option_formset %}
-                <div class="option-item">
-                    {{ form.as_p }}
+            <div class="option-item mb-3 p-3 border rounded">
+                <h6 class="text-muted mb-2">Option {{ forloop.counter }}</h6>
+        
+                <!-- Instead of just {{ form.as_p }}, render nicely -->
+                <div class="mb-2">
+                    {{ form.text.label_tag }}
+                    {{ form.text }}
                 </div>
-            {% endfor %}
+        
+                <div class="form-check mb-2">
+                    {{ form.is_correct }}
+                    {{ form.is_correct.label_tag }}
+                </div>
+        
+                <div class="form-check text-danger">
+                    {{ form.DELETE }}
+                    <label class="form-check-label" for="{{ form.DELETE.id_for_label }}">
+                        🗑️ Mark this option for deletion
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+        
         </div>
 
         <!-- Add More Options Button (JS will handle this) -->

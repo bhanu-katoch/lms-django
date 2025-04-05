@@ -1,30 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Edit Question for "{{ quiz.title }}"</h2>
+<div class="container my-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center mb-4">✏️ Edit Question</h2>
+        <h5 class="text-center text-muted mb-4">for "{{ quiz.title }}"</h5>
 
-    <form method="POST">
-        {% csrf_token %}
-        
-        <!-- Question Form -->
-        <div class="mb-3">
-            <label for="id_text" class="form-label">Question:</label>
-            {{ question_form.text }}
-        </div>
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            <!-- Question Text -->
+            <div class="mb-4">
+                <label for="id_text" class="form-label fw-bold">Question:</label>
+                {{ question_form.text }}
+            </div>
 
-        <h4>Options</h4>
-        <div id="option-formset">
-            {{ option_formset.management_form }}
-            {% for form in option_formset %}
-                <div class="option-item">
-                    {{ form.as_p }}
+            <hr class="my-4">
+
+            <!-- Options -->
+            <h4 class="mb-3">Options</h4>
+            <div id="option-formset">
+                {{ option_formset.management_form }}
+                <div class="row g-3">
+                    {% for form in option_formset %}
+                        <div class="col-md-6">
+                            <div class="card p-3 shadow-sm">
+                                <h6 class="text-muted mb-2">Option {{ forloop.counter }}</h6>  <!-- 👈 Add this line -->
+                                {{ form }}
+                            </div>
+                        </div>
+                    {% endfor %}
+
                 </div>
-            {% endfor %}
-        </div>
+            </div>
 
-        <br>
+            <br>
 
-        <button type="submit" class="btn btn-success">✅ Update Question</button>
-        <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-secondary">⬅ Back to Quiz</a>
-    </form>
+            <div class="d-flex justify-content-center gap-3">
+                <button type="submit" class="btn btn-success px-4">✅ Update Question</button>
+                <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-secondary px-4">⬅ Back to Quiz</a>
+            </div>
+        </form>
+    </div>
+</div>
 {% endblock %}

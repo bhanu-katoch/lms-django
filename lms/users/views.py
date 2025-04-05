@@ -9,7 +9,9 @@ from django.views.decorators.csrf import csrf_exempt
 @never_cache
 def user_login(request):
     if request.user.is_authenticated:
-        return redirect("dashboard")  # Redirect if already logged in
+        if request.user.role=='admin':
+            return redirect("dashboard")
+        return redirect("course_list")  # Redirect if already logged in
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -18,7 +20,9 @@ def user_login(request):
         if user is not None:
             login(request, user)
             #messages.success(request, "Logged in successfully!")
-            return redirect("dashboard")  # Change to your home page
+            if request.user.role=='admin':
+                return redirect("dashboard")
+            return redirect("course_list")  # Change to your home page
         else:
             messages.error(request, "Invalid username or password!")
 
