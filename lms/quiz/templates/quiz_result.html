@@ -29,7 +29,7 @@
 
         <!-- Show Answers Button -->
         <div class="text-center mt-4">
-            <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#answersCard" aria-expanded="false" aria-controls="answersCard">
+            <button id="toggleButton" class="btn btn-primary btn-lg" type="button" data-bs-toggle="collapse" data-bs-target="#answersCard" aria-expanded="false" aria-controls="answersCard">
                 Show Your Answers
             </button>
         </div>
@@ -92,7 +92,20 @@
                 </ul>
             </div>
         </div>
-
+        <script>
+            const toggleButton = document.getElementById('toggleButton');
+            const answersCard = document.getElementById('answersCard');
+        
+            // When collapse is fully shown
+            answersCard.addEventListener('shown.bs.collapse', function () {
+                toggleButton.textContent = 'Hide Your Answers';
+            });
+        
+            // When collapse is fully hidden
+            answersCard.addEventListener('hidden.bs.collapse', function () {
+                toggleButton.textContent = 'Show Your Answers';
+            });
+        </script>
         <!-- Action Buttons -->
         <div class="d-flex justify-content-center gap-4 mt-5 flex-wrap">
             <a href="{% url 'restart_quiz' quiz.id %}" class="btn btn-outline-warning btn-lg d-flex align-items-center gap-2">
