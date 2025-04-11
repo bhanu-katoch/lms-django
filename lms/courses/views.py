@@ -109,19 +109,25 @@ def course_detail(request, course_id):
         'is_enrolled': is_enrolled
     })
 
+from django.http import HttpResponseForbidden
+
 @login_required
 def course_content(request, course_id):
     course = get_object_or_404(Course, id=course_id)
+
+    authorized = course.is_free() or request.user in course.students.all()
+
     quizzes = Quiz.objects.filter(course=course)
-    
-    # Get quiz attempts for the logged-in user
     quiz_attempts = {attempt.quiz.id: attempt for attempt in QuizAttempt.objects.filter(student=request.user)}
 
     return render(request, "courses/course_content.html", {
         "course": course,
         "quizzes": quizzes,
-        "quiz_attempts": quiz_attempts
+        "quiz_attempts": quiz_attempts,
+        "authorized": authorized,  # <-- send this to template
     })
+
+
 @login_required
 def enroll_course(request, course_id):
     """View to enroll a user in a course, with admin auto-enrolled and instructors restricted."""
