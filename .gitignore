@@ -18,7 +18,8 @@ media/
 *.swp
 migrations/
 
-ER_LMS.*
+ER_LMS.* 
+#er diagram of project
 
 
 data.txt
