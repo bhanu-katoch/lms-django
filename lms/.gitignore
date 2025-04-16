@@ -17,6 +17,7 @@ media/
 *.swp
 migrations/
 
+ER_LMS.*
 
 
 data.txt
