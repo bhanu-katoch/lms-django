@@ -9,6 +9,7 @@ db.sqlite3
 *.pyo
 venv/
 env/
+.*
 staticfiles/
 media/
 
